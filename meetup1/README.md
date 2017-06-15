@@ -1,4 +1,4 @@
-** Bienvenidos al primer Meetup de Elxir en Honduras **
+Bienvenidos al primer Meetup de Elxir en Honduras
 
 El objetivo del meetup es hacer una breve introducción del lenguaje de programación Elixir.  Nos enfocamos en su potencial de ejecutar tareas de manera asyncrona y concurrente utilizando procesos.
 
