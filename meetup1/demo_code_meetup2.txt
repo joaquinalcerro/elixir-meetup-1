@@ -1,0 +1,108 @@
+Ejemplo 1. Importar archivo CSV
+
+ciudades = File.read!("us-cities-sample")
+
+Puntos a tratar:
+1. Como funciona la ayuda. Ver ejemplos de File.read! y sin !
+2. Hablar un poco del modulo y la funcion y la funcion anonima
+3. Utilizar la funcion i para ver los detalles del resultado
+
+Ejemplo 2. Transformacion de la data
+
+definir funcion anonima para String split
+
+string_split = fn string, char -> String.split(string, char) end
+
+ciudades |> string_split.("\n")
+
+puntos a tratar:
+1. Mostrar la inmutabilidad
+2. Como se crea una funcion anonima
+
+Ejemplo 3. Recursion
+
+defmodule Traverse do
+  def take(lista, num, nueva_lista \\ [], secuencia \\ 0) do
+    case lista do
+      [] ->
+        nueva_lista
+      lista ->
+        if secuencia < num do
+          {item, resto} = List.pop_at(lista, 0)
+          nueva_lista = nueva_lista ++ [item]
+          take(resto, num, nueva_lista, secuencia + 1)
+        else
+          nueva_lista
+        end
+    end
+  end
+
+  def take2(lista, num, nueva_lista \\ [], secuencia \\ 0)
+  def take2([], _num, nueva_lista, _secuencia), do: nueva_lista
+  def take2(_lista, num, nueva_lista, secuencia) when num == secuencia, do: nueva_lista
+  def take2([item | resto], num, nueva_lista, secuencia), do: take2(resto, num, nueva_lista ++ [item], secuencia + 1)
+end
+
+Puntos a tratar:
+1. Hablar de pattern matching
+2. Hablar de la reduccion de codigo en 5 lineas... es decir, 38% 
+
+
+4. Ejemplos con Enum: sacar solo las ciudades
+
+
+ciudades |> split_string("\n") |> Enum.take(10) |> Enum.map(fn ciudad -> String.split(ciudad, ",") end) |> Enum.map(fn ciudad -> Enum.at(ciudad, 1) end)
+
+Puntos a tratar:
+1. Enum ya tine una funcion take... utilicemosla.
+2. Existen varias librerias para recorrecr una estructura de datos pero ENUM es la mas comun.
+3. Hacer ejemplo de una funcion anonima
+
+
+5. Demo de procesos
+
+--> Primero ejecutar tarea larga con un solo proceso
+
+ciudades
+|> String.split("\n")
+|> Enum.map(&String.split(&1, ","))
+|> Enum.map(&Enum.at(&1, 1))
+|> Enum.take(50)
+|> Enum.map(&Weather.Worker.temperature_of/1)
+
+--> Segundo ejecutar tarea larga Parallel Map
+
+ciudades
+|> String.split("\n")
+|> Enum.map(&String.split(&1, ","))
+|> Enum.map(&Enum.at(&1, 1))
+|> Enum.take(50)
+|> Weather.Parallel.pmap2(Weather.Worker, :temperature_of)
+
+Puntos a tratar:
+1. Como ejecutar una funcion con Task async
+2. Ejecutar 
+
+6. Todo Application
+
+- Agregar una lista
+
+Todo.Server.add_list("Sports") "Home", "Office"
+
+- Mostrar las listas:
+
+Todo.Server.lists_names()
+
+- Obtener PID de lista
+
+home = Todo.Server.find_list("Home")
+
+- Agregar item a la lista
+
+Todo.List.add(home, "Sacar la basura") "Lavar el carro"
+
+- Listar items
+
+Todo.List.items(home)
+
+
